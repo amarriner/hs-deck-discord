@@ -71,7 +71,7 @@ const printDeck = function(code) {
             buffer = buffer + " ";
         }
 
-        deckstring = deckstring + cards[j].card.name + buffer + "(" + cards[j].amount + ")\n";
+        deckstring = deckstring + "[" + cards[j].card.cost + "] " + cards[j].card.name + buffer + "(" + cards[j].amount + ")\n";
 
     }
     deckstring = deckstring + "```";
