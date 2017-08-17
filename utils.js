@@ -2,6 +2,13 @@
 const cards = require("./json/cards.json");
 const deckstrings = require("deckstrings");
 
+const dustCost = {
+    "Common": 40,
+    "Rare": 100,
+    "Epic": 400,
+    "Legendary": 1600
+}
+
 const findCardById = function(id) {
 
     for (set in cards) {
@@ -23,7 +30,7 @@ const findCardById = function(id) {
 const printDeck = function(code) {
 
     var deckstring = "";
-
+    var dust = 0;
     var decoded = deckstrings.decode(code);
     
     var hero = findCardById(decoded.heroes[0]);
@@ -35,6 +42,10 @@ const printDeck = function(code) {
     var cards = [];
     for (var i = 0; i < decoded.cards.length; i++) {
         var card = findCardById(decoded.cards[i][0]);
+
+        if (dustCost[card.rarity]) {
+            dust += dustCost[card.rarity];
+        }
 
         if (card.name.length > maxLength) {
             maxLength = card.name.length;
@@ -62,8 +73,10 @@ const printDeck = function(code) {
     );
 
     maxLength += 2;
-    deckstring = "**" + hero.name + " (" + hero.playerClass + ")**\n";
-    deckstring = deckstring + "```";
+    deckstring = "**" + hero.playerClass + "**\n";
+    deckstring += "*" + (decoded.format === 1 ? "Wild" : "Standard") + " ";
+    deckstring += " (" + dust.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " dust)*\n";
+    deckstring += "```";
     for (var j = 0; j < cards.length; j++) {
 
         var buffer = "";
@@ -71,10 +84,15 @@ const printDeck = function(code) {
             buffer = buffer + " ";
         }
 
-        deckstring = deckstring + "[" + cards[j].card.cost + "] " + cards[j].card.name + buffer + "(" + cards[j].amount + ")\n";
+        var space = "";
+        if (cards[j].card.cost < 10) {
+            space = " ";
+        }
+
+        deckstring += "[" + cards[j].card.cost + "] " + space + cards[j].card.name + buffer + "(" + cards[j].amount + ")\n";
 
     }
-    deckstring = deckstring + "```";
+    deckstring += "```";
 
     return deckstring;
 }
