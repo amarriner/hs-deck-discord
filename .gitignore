@@ -1,4 +1,4 @@
 node_modules
 package-lock.json
-json/cards.json
+json/*.json
 config.json
