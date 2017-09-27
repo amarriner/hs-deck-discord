@@ -5,7 +5,7 @@ const request = require("sync-request");
 
 const jsonDir = "./json/";
 const arkhamPacksUrl = "https://arkhamdb.com/api/public/packs/";
-/*
+
 console.log("Beginning Arkham Horror card refresh");
 var packs = JSON.parse(request("GET", arkhamPacksUrl).getBody());
 
@@ -25,7 +25,7 @@ console.log(all.length + " total Arkham Horror cards");
 console.log();
 console.log("--------------------------------------------------------");
 console.log();
-*/
+
 const netrunnerCardsUrl = "https://netrunnerdb.com/api/2.0/public/cards";
 console.log("Beginning Netrunner card refresh");
 
