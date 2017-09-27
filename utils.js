@@ -2,6 +2,10 @@
 const cards = require("./json/cards.json");
 const deckstrings = require("deckstrings");
 
+const netrunnerCards = require("./json/netrunner-cards.json");
+const arkhamCards = require("./json/arkham-cards.json");
+
+
 const dustCost = {
     "Common": 40,
     "Rare": 100,
@@ -26,6 +30,60 @@ const findCardById = function(id) {
     return {};
 
 };
+
+const findArkhamCardById = function(id) {
+
+    for (i in arkhamCards) {
+
+        if (arkhamCards[i].code === id) {
+            return arkhamCards[i];
+        }
+
+    }
+
+}
+
+const findArkhamCardsByName = function(name) {
+
+    var cards = [];
+    for (i in arkhamCards) {
+
+        if (arkhamCards[i].name.toLowerCase().indexOf(name.toLowerCase()) >= 0) {
+            cards.push(arkhamCards[i]);
+        }
+
+    }
+
+    return cards;
+
+}
+
+const findNetrunnerCardById = function(id) {
+
+    for (i in netrunnerCards.data) {
+
+        if (netrunnerCards.data[i].code === id) {
+            return netrunnerCards.data[i];
+        }
+
+    }
+
+}
+
+const findNetrunnerCardsByName = function(name) {
+
+    var cards = [];
+    for (i in netrunnerCards.data) {
+
+        if (netrunnerCards.data[i].title.toLowerCase().indexOf(name.toLowerCase()) >= 0) {
+            cards.push(netrunnerCards.data[i]);
+        }
+
+    }
+
+    return cards;
+
+}
 
 const printDeck = function(code) {
 
@@ -99,5 +157,9 @@ const printDeck = function(code) {
 
 module.exports = {
     findCardById: findCardById,
+    findArkhamCardById: findArkhamCardById,
+    findArkhamCardsByName: findArkhamCardsByName,
+    findNetrunnerCardById: findNetrunnerCardById,
+    findNetrunnerCardsByName: findNetrunnerCardsByName,
     printDeck: printDeck
 };
