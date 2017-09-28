@@ -41,7 +41,7 @@ client.on("message", message => {
             var card = utils.findArkhamCardById(match[1]);
 
             if (card) {
-                message.channel.send("https://arkhamdb.com/bundles/cards/{code}.png".replace("{code}", card.code));
+                message.channel.send("https://arkhamdb.com" + card.imagesrc);
                 return;
             }
 
@@ -51,7 +51,7 @@ client.on("message", message => {
                 if (cards.length > 1) {
                     message.channel.send("Found " + cards.length + " cards (" + cards.map(function(c) { return c.name; }).join(",") + "), displaying the first one"); 
                 }
-                message.channel.send("https://arkhamdb.com/bundles/cards/{code}.png".replace("{code}", cards[0].code));
+                message.channel.send("https://arkhamdb.com" + cards[0].imagesrc);
                 return;
             }
             
