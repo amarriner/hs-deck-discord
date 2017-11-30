@@ -1,10 +1,9 @@
 
-const cards = require("./json/cards.json");
 const deckstrings = require("deckstrings");
 
+const hearthstoneCards = require("./json/cards.json");
 const netrunnerCards = require("./json/netrunner-cards.json");
 const arkhamCards = require("./json/arkham-cards.json");
-
 
 const dustCost = {
     "Common": 40,
@@ -15,12 +14,12 @@ const dustCost = {
 
 const findCardById = function(id) {
 
-    for (set in cards) {
+    for (set in hearthstoneCards) {
 
-        for (c in cards[set]) {
+        for (c in hearthstoneCards[set]) {
             
-            if (cards[set][c]["dbfId"] == id) {
-                return cards[set][c];
+            if (hearthstoneCards[set][c]["dbfId"] == id) {
+                return hearthstoneCards[set][c];
             }
 
         }
@@ -30,6 +29,43 @@ const findCardById = function(id) {
     return {};
 
 };
+
+const findHearthstoneCardById = function(id) {
+
+    for (set in hearthstoneCards) {
+
+        for (c in hearthstoneCards[set]) {
+
+            if (hearthstoneCards[set][c].cardId === id) {
+                return hearthstoneCards[set][c];
+            }
+
+        }
+
+    }
+
+    return {};
+}
+
+const findHearthstoneCardsByName = function(name) {
+    
+    var cards = [];
+    
+    for (set in hearthstoneCards) {
+    
+        for (c in hearthstoneCards[set]) {
+    
+            if (hearthstoneCards[set][c].name.toLowerCase().indexOf(name.toLowerCase()) >= 0) {
+                cards.push(hearthstoneCards[set][c]);
+            }
+    
+        }
+    
+    }
+    
+    return cards;
+
+}
 
 const findArkhamCardById = function(id) {
 
@@ -159,6 +195,8 @@ module.exports = {
     findCardById: findCardById,
     findArkhamCardById: findArkhamCardById,
     findArkhamCardsByName: findArkhamCardsByName,
+    findHearthstoneCardById: findHearthstoneCardById,
+    findHearthstoneCardsByName: findHearthstoneCardsByName,
     findNetrunnerCardById: findNetrunnerCardById,
     findNetrunnerCardsByName: findNetrunnerCardsByName,
     printDeck: printDeck

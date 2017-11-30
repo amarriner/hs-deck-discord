@@ -5,6 +5,7 @@ const utils = require("./utils.js");
 const re = /^!deck (.*)$/;
 const nr = /^!nr (.*)$/;
 const ah = /^!ah (.*)$/;
+const hs = /^!hs (-gold )?([^-].*)$/;
 const client = new discord.Client();
 
 client.on('ready', () => {
@@ -29,6 +30,60 @@ client.on("message", message => {
         }
 
     }
+
+    //
+    // Get Hearthstone card
+    //
+    if (message.content.startsWith("!hs")) {
+        
+                var match = hs.exec(message.content);
+                if (match && match.length > 0) {
+        
+                    var card = utils.findHearthstoneCardById(match[match.length - 1]);
+                    var gold = false;
+
+                    for (i in match) {
+                        if (match[i] === "-gold ") {
+                            gold = true;
+                        }
+                    }
+        
+                    if (card && card.img) {
+
+                        if (gold && card.imgGold) {
+                            message.channel.send(card.imgGold);
+                        }
+                        else {
+                            message.channel.send(card.img);
+                        }
+
+                        return;
+                    }
+        
+                    var cards = utils.findHearthstoneCardsByName(match[match.length - 1]);   
+                    
+                    if (cards.length) {
+
+                        if (cards.length > 1) {
+                            message.channel.send("Found " + cards.length + " cards (" + cards.map(function(c) { return c.name; }).join(",") + "), displaying the first one"); 
+                        }
+
+                        else {
+                            if (gold && cards[0].imgGold) {
+                                message.channel.send(cards[0].imgGold);
+                            }
+                            else {
+                                message.channel.send(cards[0].img);
+                            }
+                        }
+                        
+                        return;
+                    }
+
+                    message.channel.send("Couldn't find matching Hearthstone card!")
+
+                }
+            }
 
     //
     // Get Arkham card
