@@ -40,24 +40,12 @@ client.on("message", message => {
                 if (match && match.length > 0) {
         
                     var card = utils.findHearthstoneCardById(match[match.length - 1]);
-                    var gold = false;
 
-                    for (i in match) {
-                        if (match[i] === "-gold ") {
-                            gold = true;
-                        }
-                    }
-        
                     if (card && card.img) {
 
-                        if (gold && card.imgGold) {
-                            message.channel.send(card.imgGold);
-                        }
-                        else {
-                            message.channel.send(card.img);
-                        }
-
+                        message.channel.send(config.aws.baseUrl + card.dbfId + ".png");
                         return;
+
                     }
         
                     var cards = utils.findHearthstoneCardsByName(match[match.length - 1]);   
@@ -69,12 +57,7 @@ client.on("message", message => {
                         }
 
                         else {
-                            if (gold && cards[0].imgGold) {
-                                message.channel.send(cards[0].imgGold);
-                            }
-                            else {
-                                message.channel.send(cards[0].img);
-                            }
+                            message.channel.send(config.aws.baseUrl + cards[0].dbfId + ".png");
                         }
                         
                         return;

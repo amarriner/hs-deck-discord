@@ -2,6 +2,7 @@
 const config = require("./config.json");
 const fs = require("fs");
 const request = require("sync-request");
+var unirest = require("unirest");
 
 const jsonDir = "./json/";
 const arkhamPacksUrl = "https://arkhamdb.com/api/public/packs/";
@@ -36,13 +37,9 @@ console.log();
 console.log("--------------------------------------------------------");
 console.log();
 
-const hearthstoneCardsUrl = "https://omgvamp-hearthstone-v1.p.mashape.com/cards"
 console.log("Beginning Hearthstone card refresh");
 
-cards = JSON.parse(request("GET", hearthstoneCardsUrl, {
-    "headers": {
-        "X-Mashape-Key": config.mashapeKey
-    }
-}).getBody());
-
-fs.writeFileSync(jsonDir + "cards.json", JSON.stringify(cards));
+unirest.get("https://api.hearthstonejson.com/v1/latest/enUS/cards.collectible.json")
+    .end(function (result) {
+        fs.writeFileSync(jsonDir + "cards.json", JSON.stringify(result.body));
+   });

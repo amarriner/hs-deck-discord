@@ -14,14 +14,10 @@ const dustCost = {
 
 const findCardById = function(id) {
 
-    for (set in hearthstoneCards) {
-
-        for (c in hearthstoneCards[set]) {
+    for (c in hearthstoneCards) {
             
-            if (hearthstoneCards[set][c]["dbfId"] == id) {
-                return hearthstoneCards[set][c];
-            }
-
+        if (hearthstoneCards[c]["dbfId"] == id) {
+            return hearthstoneCards[c];
         }
 
     }
@@ -32,33 +28,27 @@ const findCardById = function(id) {
 
 const findHearthstoneCardById = function(id) {
 
-    for (set in hearthstoneCards) {
+    for (c in hearthstoneCards) {
 
-        for (c in hearthstoneCards[set]) {
-
-            if (hearthstoneCards[set][c].cardId === id) {
-                return hearthstoneCards[set][c];
-            }
-
+        if (hearthstoneCards[c].cardId === id) {
+            return hearthstoneCards[c];
         }
 
     }
 
     return {};
+
 }
 
 const findHearthstoneCardsByName = function(name) {
     
     var cards = [];
     
-    for (set in hearthstoneCards) {
+    for (c in hearthstoneCards) {
     
-        for (c in hearthstoneCards[set]) {
-    
-            if (hearthstoneCards[set][c].name.toLowerCase().indexOf(name.toLowerCase()) >= 0) {
-                cards.push(hearthstoneCards[set][c]);
-            }
-    
+        if (hearthstoneCards[c].name.toLowerCase().indexOf(name.toLowerCase()) >= 0) {
+            console.log(hearthstoneCards[c]);
+            cards.push(hearthstoneCards[c]);
         }
     
     }

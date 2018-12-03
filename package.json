@@ -12,8 +12,12 @@
   "author": "Aaron Marriner <marrinea@strose.edu>",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.368.0",
     "deckstrings": "^1.1.0",
-    "discord.js": "^11.1.0",
-    "sync-request": "^4.1.0"
+    "discord.js": "^11.4.2",
+    "elasticlunr": "^0.9.5",
+    "hearthstone-card-images": "^4.11.0",
+    "sync-request": "^4.1.0",
+    "unirest": "^0.5.1"
   }
 }
