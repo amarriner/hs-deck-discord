@@ -46,7 +46,8 @@ const findHearthstoneCardsByName = function(name) {
     
     for (c in hearthstoneCards) {
     
-        if (hearthstoneCards[c].name.toLowerCase().indexOf(name.toLowerCase()) >= 0) {
+        if (hearthstoneCards[c].name.toLowerCase().indexOf(name.toLowerCase()) >= 0 &&
+            hearthstoneCards[c].collectible) {
             console.log(hearthstoneCards[c]);
             cards.push(hearthstoneCards[c]);
         }
