@@ -5,7 +5,7 @@ const utils = require("./utils.js");
 const re = /^!deck (.*)$/;
 const nr = /^!nr (.*)$/;
 const ah = /^!ah (.*)$/;
-const hs = /^!hs (-gold )?([^-].*)$/;
+const hs = /^!hs ([^-].*)$/;
 const client = new discord.Client();
 
 client.on('ready', () => {
@@ -38,10 +38,10 @@ client.on("message", message => {
         
                 var match = hs.exec(message.content);
                 if (match && match.length > 0) {
-        
+
                     var card = utils.findHearthstoneCardById(match[match.length - 1]);
 
-                    if (card && card.img) {
+                    if (card) {
 
                         message.channel.send(config.aws.baseUrl + card.dbfId + ".png");
                         return;
@@ -49,16 +49,14 @@ client.on("message", message => {
                     }
         
                     var cards = utils.findHearthstoneCardsByName(match[match.length - 1]);   
-                    
+        
                     if (cards.length) {
 
                         if (cards.length > 1) {
-                            message.channel.send("Found " + cards.length + " cards (" + cards.map(function(c) { return c.name; }).join(",") + "), displaying the first one"); 
+                            message.channel.send("Found " + cards.length + " cards (" + cards.map(function(c) { return c.name; }).join(", ") + "), displaying the first one"); 
                         }
 
-                        else {
-                            message.channel.send(config.aws.baseUrl + cards[0].dbfId + ".png");
-                        }
+                        message.channel.send(config.aws.baseUrl + cards[0].dbfId + ".png");
                         
                         return;
                     }
@@ -87,7 +85,7 @@ client.on("message", message => {
             
             if (cards.length) {
                 if (cards.length > 1) {
-                    message.channel.send("Found " + cards.length + " cards (" + cards.map(function(c) { return c.name; }).join(",") + "), displaying the first one"); 
+                    message.channel.send("Found " + cards.length + " cards (" + cards.map(function(c) { return c.name; }).join(", ") + "), displaying the first one"); 
                 }
                 message.channel.send("https://arkhamdb.com" + cards[0].imagesrc);
                 return;
@@ -116,7 +114,7 @@ client.on("message", message => {
             
             if (cards.length) {
                 if (cards.length > 1) {
-                    message.channel.send("Found " + cards.length + " cards (" + cards.map(function(c) { return c.title; }).join(",") + "), displaying the first one"); 
+                    message.channel.send("Found " + cards.length + " cards (" + cards.map(function(c) { return c.title; }).join(", ") + "), displaying the first one"); 
                 }
                 message.channel.send("https://netrunnerdb.com/card_image/{code}.png".replace("{code}", cards[0].code));
                 return;

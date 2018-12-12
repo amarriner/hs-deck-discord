@@ -16,13 +16,13 @@ const findCardById = function(id) {
 
     for (c in hearthstoneCards) {
             
-        if (hearthstoneCards[c]["dbfId"] == id) {
+        if (hearthstoneCards[c].dbfId == id) {
             return hearthstoneCards[c];
         }
 
     }
 
-    return {};
+    return false;
 
 };
 
@@ -30,13 +30,13 @@ const findHearthstoneCardById = function(id) {
 
     for (c in hearthstoneCards) {
 
-        if (hearthstoneCards[c].cardId === id) {
+        if (hearthstoneCards[c].dbfId === id) {
             return hearthstoneCards[c];
         }
 
     }
 
-    return {};
+    return false;
 
 }
 
@@ -48,7 +48,6 @@ const findHearthstoneCardsByName = function(name) {
     
         if (hearthstoneCards[c].name.toLowerCase().indexOf(name.toLowerCase()) >= 0 &&
             hearthstoneCards[c].collectible) {
-            console.log(hearthstoneCards[c]);
             cards.push(hearthstoneCards[c]);
         }
     

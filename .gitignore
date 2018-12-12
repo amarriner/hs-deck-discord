@@ -3,3 +3,4 @@ package-lock.json
 config.json
 /json/*.json
 /hearthstone-card-images
+md5
