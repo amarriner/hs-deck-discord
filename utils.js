@@ -6,10 +6,10 @@ const netrunnerCards = require("./json/netrunner-cards.json");
 const arkhamCards = require("./json/arkham-cards.json");
 
 const dustCost = {
-    "Common": 40,
-    "Rare": 100,
-    "Epic": 400,
-    "Legendary": 1600
+    "COMMON": 40,
+    "RARE": 100,
+    "EPIC": 400,
+    "LEGENDARY": 1600
 }
 
 const findCardById = function(id) {
@@ -157,7 +157,7 @@ const printDeck = function(code) {
     );
 
     maxLength += 2;
-    deckstring = "**" + hero.playerClass + "**\n";
+    deckstring = "**" + hero.cardClass + "**\n";
     deckstring += "*" + (decoded.format === 1 ? "Wild" : "Standard") + " ";
     deckstring += " (" + dust.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " dust)*\n";
     deckstring += "```";
