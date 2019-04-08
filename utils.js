@@ -42,15 +42,26 @@ const findHearthstoneCardById = function(id) {
 
 const findHearthstoneCardsByName = function(name) {
     
+    var exactMatch;
     var cards = [];
     
     for (c in hearthstoneCards) {
     
-        if (hearthstoneCards[c].name.toLowerCase().indexOf(name.toLowerCase()) >= 0 &&
+        if (hearthstoneCards[c].name.toLowerCase() == name.toLowerCase() &&
             hearthstoneCards[c].collectible) {
+                exactMatch = hearthstoneCards[c];
+        }
+        else if (hearthstoneCards[c].name.toLowerCase().indexOf(name.toLowerCase()) >= 0 &&
+            hearthstoneCards[c].collectible) {
+
             cards.push(hearthstoneCards[c]);
+
         }
     
+    }
+    
+    if (exactMatch) {
+        cards.unshift(exactMatch);
     }
     
     return cards;

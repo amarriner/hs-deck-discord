@@ -17,6 +17,7 @@
     "discord.js": "^11.4.2",
     "elasticlunr": "^0.9.5",
     "hearthstone-card-images": "^4.11.0",
+    "image-downloader": "^3.4.2",
     "sync-request": "^4.1.0",
     "unirest": "^0.5.1"
   }
