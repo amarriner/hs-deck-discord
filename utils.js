@@ -43,7 +43,7 @@ function parseCardText(str) {
     }
 
     var parsedString = str.replace(/\n/g, " ")
-        .replace(/^\[x\]/, "")
+        .replace(/\[x\]/, "")
         .replace(/<\/?i>/g, "*")
         .replace(/<\/?b>/g, "**")
         .replace(/\$/g, "");
