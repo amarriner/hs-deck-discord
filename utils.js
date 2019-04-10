@@ -96,7 +96,7 @@ const buildEmbedFromCard = function(card) {
         " " + discord.client.emojis.find(emoji => emoji.name === "rarity" + card.rarity.toLowerCase()) : "");
     
     const setEmoji = (card.set !== "CORE" ? 
-        discord.client.emojis.find(emoji => emoji.name === "set" + card.set.toLowerCase()) : "");
+        " " + discord.client.emojis.find(emoji => emoji.name === "set" + card.set.toLowerCase()) : "");
 
     var embed = new discord.RichEmbed();
     embed.title = card.name.toUpperCase();
