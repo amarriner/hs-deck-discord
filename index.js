@@ -1,70 +1,52 @@
 const config = require("./config.json");
-const discord = require("discord.js");
+const discord = require("./discord");
 const utils = require("./utils.js");
 
 const re = /^!deck (.*)$/;
 const nr = /^!nr (.*)$/;
 const ah = /^!ah (.*)$/;
 const hs = /^!hs ([^-].*)$/;
-const client = new discord.Client();
 
-client.on('ready', () => {
-  console.log('I am ready!');
+discord.client.on('ready', () => {
+    console.log('I am ready!');
 });
 
-client.on("message", message => {
-
-    //
-    // Process Hearthstone deckstring
-    //
-    if (message.content.startsWith("!deck")) {
-
-        var match = re.exec(message.content);
-        if (match && match.length > 0) {
-
-            message.channel.send(utils.printDeck(match[1]));
-            
-        }
-        else {
-            message.channel.send("***Missing or invalid deck code!***");
-        }
-
-    }
+discord.client.on("message", message => {
 
     //
     // Get Hearthstone card
     //
     if (message.content.startsWith("!hs")) {
-        
-                var match = hs.exec(message.content);
-                if (match && match.length > 0) {
 
-                    var card = utils.findHearthstoneCardById(match[match.length - 1]);
+        var match = hs.exec(message.content);
+        if (match && match.length > 0) {
 
-                    if (card) {
+            var card = utils.findHearthstoneCardById(match[match.length - 1]);
 
-                        message.channel.send(config.aws.baseUrl + card.dbfId + ".png");
-                        return;
+            if (card) {
 
-                    }
-        
-                    var cards = utils.findHearthstoneCardsByName(match[match.length - 1]);   
-        
-                    if (cards.length) {
+                message.channel.send(utils.buildEmbedFromCard(card));
+                return;
 
-                        if (cards.length > 1) {
-                            message.channel.send("Found " + cards.length + " cards (" + cards.map(function(c) { return c.name; }).join(", ") + "), displaying the first one"); 
-                        }
-
-                        message.channel.send(config.aws.baseUrl + cards[0].dbfId + ".png");
-                        
-                        return;
-                    }
-
-                    message.channel.send("Couldn't find matching Hearthstone card!")
-
-                }
             }
+
+            var cards = utils.findHearthstoneCardsByName(match[match.length - 1]);
+
+            if (cards.length) {
+
+                if (cards.length > 1) {
+                    message.channel.send("Found " + cards.length + " cards (" + cards.map(function (c) { return c.name; }).join(", ") + "), displaying the first one");
+                }
+
+                message.channel.send(utils.buildEmbedFromCard(cards[0]));
+
+                return;
+            }
+
+            message.channel.send("Couldn't find matching Hearthstone card!")
+
+        }
+    }
 
     //
     // Get Arkham card
@@ -81,16 +63,16 @@ client.on("message", message => {
                 return;
             }
 
-            var cards = utils.findArkhamCardsByName(match[1]);                
-            
+            var cards = utils.findArkhamCardsByName(match[1]);
+
             if (cards.length) {
                 if (cards.length > 1) {
-                    message.channel.send("Found " + cards.length + " cards (" + cards.map(function(c) { return c.name; }).join(", ") + "), displaying the first one"); 
+                    message.channel.send("Found " + cards.length + " cards (" + cards.map(function (c) { return c.name; }).join(", ") + "), displaying the first one");
                 }
                 message.channel.send("https://arkhamdb.com" + cards[0].imagesrc);
                 return;
             }
-            
+
             message.channel.send("Couldn't find matching Arkham Horror card!")
         }
     }
@@ -110,20 +92,20 @@ client.on("message", message => {
                 return;
             }
 
-            var cards = utils.findNetrunnerCardsByName(match[1]);                
-            
+            var cards = utils.findNetrunnerCardsByName(match[1]);
+
             if (cards.length) {
                 if (cards.length > 1) {
-                    message.channel.send("Found " + cards.length + " cards (" + cards.map(function(c) { return c.title; }).join(", ") + "), displaying the first one"); 
+                    message.channel.send("Found " + cards.length + " cards (" + cards.map(function (c) { return c.title; }).join(", ") + "), displaying the first one");
                 }
                 message.channel.send("https://netrunnerdb.com/card_image/{code}.png".replace("{code}", cards[0].code));
                 return;
             }
-            
+
             message.channel.send("Couldn't find matching Netrunner card!")
         }
 
     }
 })
 
-client.login(config.botToken); 
+discord.client.login(config.botToken); 

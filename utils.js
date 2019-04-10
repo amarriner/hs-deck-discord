@@ -1,5 +1,7 @@
 
+const config = require("./config.json")
 const deckstrings = require("deckstrings");
+const discord = require("./discord");
 
 const hearthstoneCards = require("./json/cards.json");
 const netrunnerCards = require("./json/netrunner-cards.json");
@@ -11,6 +13,118 @@ const dustCost = {
     "EPIC": 400,
     "LEGENDARY": 1600
 }
+
+function parseCardFlavor(str) {
+
+    if (!str) {
+        return "";
+    }
+
+    var parsedString = str.replace(/\n/g, " ")
+        .replace(/<\/?i>/g, "**");
+
+    return parsedString;
+
+}
+
+function parseCardText(str) {
+
+    var exp;
+    var match;
+
+    if (!str) {
+        return "";
+    }
+
+    var parsedString = str.replace(/\n/g, " ")
+        .replace(/^\[x\]/, "")
+        .replace(/<\/?i>/g, "*")
+        .replace(/<\/?b>/g, "**")
+        .replace(/\$/g, "");
+
+    //
+    // Replace the singular/plural stuff
+    //
+    exp = /@ \|([0-9])\(([a-zA-Z]*), ([a-zA-Z]*)\)/;
+    match = exp.exec(parsedString);
+    if (match && match.length > 0) {
+
+        var num = match[match.length - 3];
+        const singluar = match[match.length - 2];
+        const plural = match[match.length - 1];
+
+        //
+        // I think all the card text has the max value ??? so I'm 
+        // just setting the number back to one so it shows the way 
+        // the card reads in the collection.......I think...
+        //
+        num = 1;
+
+        parsedString = parsedString.replace(exp, num + " " + ( num > 1 ? plural : singluar ));
+
+    }
+    
+    return parsedString;
+
+}
+
+const buildEmbedFromCard = function(card) {
+
+    const manaEmoji = discord.client.emojis.find(emoji => emoji.name === "costmana");
+    
+    const attackEmoji = (card.type !== "SPELL" ? 
+        discord.client.emojis.find(emoji => emoji.name === (card.type === "WEAPON" ? "attackweapon" : "attackminion")) + " " : "");
+    
+    const attack = (card.type !== "SPELL" ? card.attack : "");
+
+    const healthEmoji = (card.type !== "SPELL" ?
+        discord.client.emojis.find(emoji => emoji.name === (card.type === "WEAPON" ? "durability" : "health")) + " " : "");
+
+
+    const health = (card.type !== "SPELL" ? (card.type === "WEAPON" ? card.durability : card.health) : "");
+    
+    const classEmoji = (card.cardClass !== "NEUTRAL" ? 
+        " " + discord.client.emojis.find(emoji => emoji.name === card.cardClass.toLowerCase()) : "");
+    
+    const rarityEmoji = (card.rarity !== "FREE" ?
+        " " + discord.client.emojis.find(emoji => emoji.name === "rarity" + card.rarity.toLowerCase()) : "");
+    
+    const setEmoji = (card.set !== "CORE" ? 
+        discord.client.emojis.find(emoji => emoji.name === "set" + card.set.toLowerCase()) : "");
+
+    var embed = new discord.RichEmbed();
+    // embed.title = card.name;
+    // embed.description = parseCardText(card.text);
+    embed.url = config.aws.baseUrl + card.dbfId + ".png";
+    embed.color = 30750;
+    embed.timestamp = new Date();
+    embed.thumbnail = {
+        "url": config.aws.baseUrl + card.dbfId + ".png"
+    };
+    embed.footer = {
+        "icon_url": "https://cdn.discordapp.com/app-icons/347801865431416833/d38ce6960e1d11f89e229b5e32bdbf34.png",
+        "text": "hs-deck-discord"
+    };
+    embed.author = {
+        "name": card.name,
+        "url": config.aws.baseUrl + card.dbfId + ".png",
+        "icon_url": "https://cdn.discordapp.com/app-icons/347801865431416833/d38ce6960e1d11f89e229b5e32bdbf34.png"
+    };
+    embed.fields = [
+        {
+            "name": manaEmoji + " " + card.cost + " " + attackEmoji + attack + healthEmoji + health + 
+                    classEmoji + rarityEmoji + setEmoji,
+            "value": card.type,
+        },
+        {
+            "name": parseCardText(card.text),
+            "value": "*" + parseCardFlavor(card.flavor) + "*\n**Artist:** " + card.artist
+        }
+    ]
+
+    return embed;
+
+};
 
 const findCardById = function(id) {
 
@@ -193,6 +307,7 @@ const printDeck = function(code) {
 }
 
 module.exports = {
+    buildEmbedFromCard: buildEmbedFromCard,
     findCardById: findCardById,
     findArkhamCardById: findArkhamCardById,
     findArkhamCardsByName: findArkhamCardsByName,
