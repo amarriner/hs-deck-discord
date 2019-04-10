@@ -14,6 +14,12 @@ const dustCost = {
     "LEGENDARY": 1600
 }
 
+function initCap(str) {
+    return str.replace(/\w\S*/g, function(txt){
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+}
+
 function parseCardFlavor(str) {
 
     if (!str) {
@@ -93,7 +99,7 @@ const buildEmbedFromCard = function(card) {
         discord.client.emojis.find(emoji => emoji.name === "set" + card.set.toLowerCase()) : "");
 
     var embed = new discord.RichEmbed();
-    embed.title = card.name;
+    embed.title = card.name.toUpperCase();
     // embed.description = parseCardText(card.text);
     embed.url = config.aws.baseUrl + card.dbfId + ".png";
     embed.color = 30750;
@@ -114,10 +120,11 @@ const buildEmbedFromCard = function(card) {
         {
             "name": manaEmoji + " " + card.cost + " " + attackEmoji + attack + " " + healthEmoji + health + 
                     classEmoji + setEmoji,
-            "value": (card.rarity !== "FREE" ? card.rarity.toUpperCase() + " " : "")
+            "value": initCap(
+			(card.rarity !== "FREE" ? card.rarity + " " : "")
 			+ (card.race ? card.race + " " : "") 
 			+ card.type 
-			+ (card.text ? "\n\u200b" : "")
+			+ (card.text ? "\n\u200b" : ""))
         },
         {
             "name": (card.text ? parseCardText(card.text) : "\u200b"),
