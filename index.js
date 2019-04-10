@@ -14,6 +14,23 @@ discord.client.on('ready', () => {
 discord.client.on("message", message => {
 
     //
+    // Process Hearthstone deckstring
+    //
+    if (message.content.startsWith("!deck")) {
+
+        var match = re.exec(message.content);
+        if (match && match.length > 0) {
+
+            message.channel.send(utils.printDeck(match[1]));
+            
+        }
+        else {
+            message.channel.send("***Missing or invalid deck code!***");
+        }
+
+    }
+
+    //
     // Get Hearthstone card
     //
     if (message.content.startsWith("!hs")) {
