@@ -93,32 +93,32 @@ const buildEmbedFromCard = function(card) {
         discord.client.emojis.find(emoji => emoji.name === "set" + card.set.toLowerCase()) : "");
 
     var embed = new discord.RichEmbed();
-    // embed.title = card.name;
+    embed.title = card.name;
     // embed.description = parseCardText(card.text);
     embed.url = config.aws.baseUrl + card.dbfId + ".png";
     embed.color = 30750;
-    embed.timestamp = new Date();
+    //embed.timestamp = new Date();
     embed.thumbnail = {
         "url": config.aws.baseUrl + card.dbfId + ".png"
     };
-    embed.footer = {
-        "icon_url": "https://cdn.discordapp.com/app-icons/347801865431416833/d38ce6960e1d11f89e229b5e32bdbf34.png",
-        "text": "hs-deck-discord"
-    };
-    embed.author = {
-        "name": card.name,
-        "url": config.aws.baseUrl + card.dbfId + ".png",
-        "icon_url": "https://cdn.discordapp.com/app-icons/347801865431416833/d38ce6960e1d11f89e229b5e32bdbf34.png"
-    };
+    //embed.footer = {
+    //    "icon_url": "https://cdn.discordapp.com/app-icons/347801865431416833/d38ce6960e1d11f89e229b5e32bdbf34.png",
+    //    "text": "hs-deck-discord"
+    //};
+    //embed.author = {
+    //    "name": card.name,
+    //    "url": config.aws.baseUrl + card.dbfId + ".png", 
+    //    "icon_url": "https://cdn.discordapp.com/app-icons/347801865431416833/d38ce6960e1d11f89e229b5e32bdbf34.png"
+    //};
     embed.fields = [
         {
             "name": manaEmoji + " " + card.cost + " " + attackEmoji + attack + " " + healthEmoji + health + 
                     classEmoji + setEmoji,
-            "value": (card.rarity !== "FREE" ? card.rarity.toUpperCase() + " " : "") + card.type
+            "value": (card.rarity !== "FREE" ? card.rarity.toUpperCase() + " " : "") + card.type + "\n\u200b"
         },
         {
             "name": (card.text ? parseCardText(card.text) : "\u200b"),
-            "value": "*" + parseCardFlavor(card.flavor) + "*\n\n**Artist:** " + card.artist
+            "value": "\u200b\n*" + parseCardFlavor(card.flavor) + "*\n**Artist:** " + card.artist
         }
     ]
 
