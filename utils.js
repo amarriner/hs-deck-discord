@@ -86,8 +86,7 @@ const buildEmbedFromCard = function(card) {
     const healthEmoji = (card.type !== "SPELL" ?
         discord.client.emojis.find(emoji => emoji.name === (card.type === "WEAPON" ? "durability" : "health")) + " " : "");
 
-
-    const health = (card.type !== "SPELL" ? (card.type === "WEAPON" ? card.durability : card.health) : "");
+    const health = (card.type !== "SPELL" ? (card.type === "WEAPON" ? card.durability : card.health) + " " : "");
     
     const classEmoji = (card.cardClass !== "NEUTRAL" ? 
         " " + discord.client.emojis.find(emoji => emoji.name === card.cardClass.toLowerCase()) : "");
