@@ -114,11 +114,14 @@ const buildEmbedFromCard = function(card) {
         {
             "name": manaEmoji + " " + card.cost + " " + attackEmoji + attack + " " + healthEmoji + health + 
                     classEmoji + setEmoji,
-            "value": (card.rarity !== "FREE" ? card.rarity.toUpperCase() + " " : "") + card.type + "\n\u200b"
+            "value": (card.rarity !== "FREE" ? card.rarity.toUpperCase() + " " : "")
+			+ (card.race ? card.race + " " : "") 
+			+ card.type 
+			+ (card.text ? "\n\u200b" : "")
         },
         {
             "name": (card.text ? parseCardText(card.text) : "\u200b"),
-            "value": "\u200b\n*" + parseCardFlavor(card.flavor) + "*\n**Artist:** " + card.artist
+            "value": (card.text ? "\u200b\n" : "") + "*" + parseCardFlavor(card.flavor) + "*\n**Artist:** " + card.artist
         }
     ]
 
