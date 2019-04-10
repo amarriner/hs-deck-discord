@@ -135,6 +135,79 @@ const buildEmbedFromCard = function(card) {
 
 };
 
+const buildEmbedFromDeck = function(code) {
+
+    var deckstring = "";
+    var dust = 0;
+    var decoded = deckstrings.decode(code);
+    
+    var hero = findCardById(decoded.heroes[0]);
+    if (!hero) {
+        return "***Missing or invalid deck code!***";
+    }
+
+    var maxLength = 0;
+    var cards = [];
+    for (var i = 0; i < decoded.cards.length; i++) {
+        var card = findCardById(decoded.cards[i][0]);
+
+        if (dustCost[card.rarity]) {
+            dust += dustCost[card.rarity];
+        }
+
+        if (card.name.length > maxLength) {
+            maxLength = card.name.length;
+        }
+
+        cards.push({
+            card: card,
+            amount: decoded.cards[i][1]
+        });
+    }
+
+    if (cards.length === 0) {
+        return "***Missing or invalid deck code!***";
+    }
+
+    cards.sort(
+        function(a, b) {
+            if (a.card.cost != b.card.cost) {
+                return a.card.cost - b.card.cost;
+            }
+            else {
+                return a.card.name - b.card.name;
+            }
+        }
+    );
+
+    const manaEmoji = discord.client.emojis.find(emoji => emoji.name === "costmana");
+
+    var description = "";
+    for (var j = 0; j < cards.length; j++) {
+        description += "[" + cards[j].card.cost + "] [" + cards[j].card.name + "](" + config.aws.baseUrl + cards[j].card.dbfId + ".png" + ") "+ (cards[j].amount > 1 ? "x2" : "") + "\n";
+    }
+
+    if (description.length >= 2048) {
+        return printDeck(code);
+    }
+
+    var embed = new discord.RichEmbed();
+    embed.color = 30750;
+    embed.thumbnail = {
+        "url": config.aws.baseUrl + hero.dbfId + ".png"
+    };
+    embed.footer = {
+        "text": (decoded.format === 1 ? "Wild" : "Standard") + " - " + dust.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " dust"
+    };
+    embed.description = description;
+    embed.author = {
+        "name": hero.cardClass.toUpperCase()
+    };
+
+    return embed;
+
+}
+
 const findCardById = function(id) {
 
     for (c in hearthstoneCards) {
@@ -290,10 +363,12 @@ const printDeck = function(code) {
         }
     );
 
+    const manaEmoji = discord.client.emojis.find(emoji => emoji.name === "costmana");
+
     maxLength += 2;
     deckstring = "**" + hero.cardClass + "**\n";
     deckstring += "*" + (decoded.format === 1 ? "Wild" : "Standard") + " ";
-    deckstring += " (" + dust.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " dust)*\n";
+    deckstring += " (" + dust.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " dust)*\n\n";
     deckstring += "```";
     for (var j = 0; j < cards.length; j++) {
 
@@ -313,10 +388,12 @@ const printDeck = function(code) {
     deckstring += "```";
 
     return deckstring;
+
 }
 
 module.exports = {
     buildEmbedFromCard: buildEmbedFromCard,
+    buildEmbedFromDeck: buildEmbedFromDeck,
     findCardById: findCardById,
     findArkhamCardById: findArkhamCardById,
     findArkhamCardsByName: findArkhamCardsByName,

@@ -3,6 +3,7 @@ const discord = require("./discord");
 const utils = require("./utils.js");
 
 const re = /^!deck (.*)$/;
+const hsdeck = /^!hsdeck (.*)$/;
 const nr = /^!nr (.*)$/;
 const ah = /^!ah (.*)$/;
 const hs = /^!hs ([^-].*)$/;
@@ -22,6 +23,23 @@ discord.client.on("message", message => {
         if (match && match.length > 0) {
 
             message.channel.send(utils.printDeck(match[1]));
+            
+        }
+        else {
+            message.channel.send("***Missing or invalid deck code!***");
+        }
+
+    }
+
+    //
+    // Process Hearthstone deckstring
+    //
+    if (message.content.startsWith("!hsdeck")) {
+
+        var match = hsdeck.exec(message.content);
+        if (match && match.length > 0) {
+
+            message.channel.send(utils.buildEmbedFromDeck(match[1]));
             
         }
         else {
