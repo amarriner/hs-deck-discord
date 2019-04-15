@@ -39,7 +39,8 @@ console.log();
 
 console.log("Beginning Hearthstone card refresh");
 
-unirest.get("https://api.hearthstonejson.com/v1/latest/enUS/cards.collectible.json")
+//unirest.get("https://api.hearthstonejson.com/v1/latest/enUS/cards.collectible.json")
+unirest.get("https://api.hearthstonejson.com/v1/latest/enUS/cards.json")
     .end(function (result) {
         fs.writeFileSync(jsonDir + "cards.json", JSON.stringify(result.body));
    });

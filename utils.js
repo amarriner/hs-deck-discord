@@ -119,11 +119,17 @@ const buildEmbedFromCard = function(card) {
     const classEmoji = (card.cardClass !== "NEUTRAL" ? 
         " " + discord.client.emojis.find(emoji => emoji.name === card.cardClass.toLowerCase()) : "");
     
-    const rarityEmoji = (card.rarity !== "FREE" ?
-        " " + discord.client.emojis.find(emoji => emoji.name === "rarity" + card.rarity.toLowerCase()) : "");
+    var rarityEmoji = "";
+    if (card.rarity) {
+        rarityEmoji = (card.rarity !== "FREE" ?
+            " " + discord.client.emojis.find(emoji => emoji.name === "rarity" + card.rarity.toLowerCase()) : "");
+    }
     
-    const setEmoji = (card.set !== "CORE" ? 
-        " " + discord.client.emojis.find(emoji => emoji.name === "set" + card.set.toLowerCase()) : "");
+    var setEmoji = "";
+    if (card.set) {
+        setEmoji = (card.set !== "CORE" ? 
+            " " + discord.client.emojis.find(emoji => emoji.name === "set" + card.set.toLowerCase()) : "");
+    }
 
     var embed = new discord.RichEmbed();
     embed.title = card.name.toUpperCase();
@@ -157,7 +163,9 @@ const buildEmbedFromCard = function(card) {
         },
         {
             "name": (card.text ? parseCardText(card.text) : "\u200b"),
-            "value": (card.text ? "\u200b\n" : "") + "*" + parseCardFlavor(card.flavor) + "*\n**Artist:** " + card.artist
+            "value": (card.text && (card.flavor || card.artist) ? "\u200b\n" : "\u200b") + 
+                (card.flavor ? "*" + parseCardFlavor(card.flavor)  + "*" : "") +
+                (card.artist ? "\n**Artist:** " + card.artist : "")
         }
     ]
 
@@ -266,11 +274,15 @@ const findHearthstoneCardById = function(id) {
 
 }
 
-const findHearthstoneCardsByName = function(name) {
+const findHearthstoneCardsByName = function(name, collectibleFlag) {
 
     return fuzzysort.go(name, 
         hearthstoneCards.filter(c => 
-            c.collectible === true &&
+            (
+                (collectibleFlag === "true" && c.collectible === true) ||
+                (collectibleFlag === "false" && !c.collectible) ||
+                (collectibleFlag === "both")
+            ) &&
             c.set !== "HERO_SKINS"), {
                 key:"name",
                 threshold: -10000

@@ -6,7 +6,9 @@ const re = /^!deck (.*)$/;
 const hsdeck = /^!hsdeck (.*)$/;
 const nr = /^!nr (.*)$/;
 const ah = /^!ah (.*)$/;
-const hs = /^!hs ([^-].*)$/;
+//const hs = /^!hs ([^-].*)$/;
+const hs = /^!hs (.*)$/;
+const collectible = /(--collectible=)(true|false|both)/;
 
 discord.client.on('ready', () => {
     console.log('I am ready!');
@@ -53,6 +55,15 @@ discord.client.on("message", message => {
     //
     if (message.content.startsWith("!hs")) {
 
+        var collectibleFlag = "true";
+        var collectibleMatch = collectible.exec(message.content);
+        if (collectibleMatch && collectibleMatch.length > 0) {
+
+            message.content = message.content.replace(collectible, "").replace("  ", " ");
+            collectibleFlag = collectibleMatch[collectibleMatch.length - 1].toLowerCase();
+
+        }
+
         var match = hs.exec(message.content);
         if (match && match.length > 0) {
 
@@ -65,7 +76,7 @@ discord.client.on("message", message => {
 
             }
 
-            var cards = utils.findHearthstoneCardsByName(match[match.length - 1]);
+            var cards = utils.findHearthstoneCardsByName(match[match.length - 1], collectibleFlag);
 
             if (cards.length) {
 
