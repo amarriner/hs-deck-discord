@@ -268,10 +268,14 @@ const findHearthstoneCardById = function(id) {
 
 const findHearthstoneCardsByName = function(name) {
 
-    return fuzzysort.go(name, hearthstoneCards, {
-        key:"name",
-        threshold: -10000
-    });
+    return fuzzysort.go(name, 
+        hearthstoneCards.filter(c => 
+            c.collectible === true &&
+            c.set !== "HERO_SKINS"), {
+                key:"name",
+                threshold: -10000
+            }
+        );
 
 }
 
