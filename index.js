@@ -70,10 +70,10 @@ discord.client.on("message", message => {
             if (cards.length) {
 
                 if (cards.length > 1) {
-                    message.channel.send("Found " + cards.length + " cards (" + cards.map(function (c) { return c.name; }).join(", ") + "), displaying the first one");
+                    message.channel.send("Found " + cards.length + " cards (" + cards.map(function (c) { return c.obj.name; }).join(", ") + "), displaying the best match");
                 }
 
-                message.channel.send(config.aws.baseUrl + cards[0].dbfId + ".png", utils.buildEmbedFromCard(cards[0]));
+                message.channel.send(config.aws.baseUrl + cards[0].obj.dbfId + ".png", utils.buildEmbedFromCard(cards[0].obj));
 
                 return;
             }

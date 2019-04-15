@@ -2,6 +2,7 @@
 const config = require("./config.json")
 const deckstrings = require("deckstrings");
 const discord = require("./discord");
+const fuzzysort = require("fuzzysort");
 
 const hearthstoneCards = require("./json/cards.json");
 const netrunnerCards = require("./json/netrunner-cards.json");
@@ -83,10 +84,37 @@ const buildEmbedFromCard = function(card) {
     
     const attack = (card.type !== "SPELL" ? card.attack : "");
 
-    const healthEmoji = (card.type !== "SPELL" ?
-        discord.client.emojis.find(emoji => emoji.name === (card.type === "WEAPON" ? "durability" : "health")) + " " : "");
+    var health = "";    
+    var healthEmoji = "";
+    switch (card.type) {
+        case "WEAPON": 
 
-    const health = (card.type !== "SPELL" ? (card.type === "WEAPON" ? card.durability : card.health) + " " : "");
+            if (card.durability) {
+                health = card.durability + " ";
+                healthEmoji = discord.client.emojis.find(emoji => emoji.name === "durability") + " ";
+            }
+
+            break;
+
+        case "MINION": 
+
+            if (card.health) {
+                health = card.health + " ";
+                healthEmoji = discord.client.emojis.find(emoji => emoji.name === "health") + " ";
+            }
+
+            break;
+
+        case "HERO": 
+
+            if (card.armor) {
+                health = card.armor + " ";
+                healthEmoji = discord.client.emojis.find(emoji => emoji.name === "armor") + " ";
+            }
+
+            break;
+
+    }
     
     const classEmoji = (card.cardClass !== "NEUTRAL" ? 
         " " + discord.client.emojis.find(emoji => emoji.name === card.cardClass.toLowerCase()) : "");
@@ -117,7 +145,9 @@ const buildEmbedFromCard = function(card) {
     //};
     embed.fields = [
         {
-            "name": manaEmoji + " " + card.cost + " " + attackEmoji + attack + " " + healthEmoji + health + 
+            "name": (card.cost ? manaEmoji + " " + card.cost + " " : "") +
+                    (attack ? attackEmoji + attack + " " : "") + 
+                    (health ? healthEmoji + health : "") +
                     classEmoji + setEmoji,
             "value": initCap(
 			(card.rarity !== "FREE" ? card.rarity + " " : "")
@@ -237,30 +267,11 @@ const findHearthstoneCardById = function(id) {
 }
 
 const findHearthstoneCardsByName = function(name) {
-    
-    var exactMatch;
-    var cards = [];
-    
-    for (c in hearthstoneCards) {
-    
-        if (hearthstoneCards[c].name.toLowerCase() == name.toLowerCase() &&
-            hearthstoneCards[c].collectible) {
-                exactMatch = hearthstoneCards[c];
-        }
-        else if (hearthstoneCards[c].name.toLowerCase().indexOf(name.toLowerCase()) >= 0 &&
-            hearthstoneCards[c].collectible) {
 
-            cards.push(hearthstoneCards[c]);
-
-        }
-    
-    }
-    
-    if (exactMatch) {
-        cards.unshift(exactMatch);
-    }
-    
-    return cards;
+    return fuzzysort.go(name, hearthstoneCards, {
+        key:"name",
+        threshold: -10000
+    });
 
 }
 
