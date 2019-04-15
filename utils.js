@@ -156,7 +156,7 @@ const buildEmbedFromCard = function(card) {
                     (health ? healthEmoji + health : "") +
                     classEmoji + setEmoji,
             "value": initCap(
-			(card.rarity !== "FREE" ? card.rarity + " " : "")
+			(card.rarity !== "FREE" && card.rarity ? card.rarity + " " : "")
 			+ (card.race ? card.race + " " : "") 
 			+ card.type 
 			+ (card.text ? "\n\u200b" : ""))
