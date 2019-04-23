@@ -41,7 +41,7 @@ discord.client.on("message", message => {
         var match = hsdeck.exec(message.content);
         if (match && match.length > 0) {
 
-            message.channel.send(utils.buildEmbedFromDeck(match[1]));
+            message.channel.send("https://hs.protolambda.com/" + match[1], utils.buildEmbedFromDeck(match[1]));
             
         }
         else {

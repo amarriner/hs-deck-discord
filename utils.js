@@ -231,6 +231,7 @@ const buildEmbedFromDeck = function(code) {
 
     var embed = new discord.RichEmbed();
     embed.color = 30750;
+    embed.url = "https://hs.protolambda.com/" + code;
     embed.thumbnail = {
         "url": config.aws.baseUrl + hero.dbfId + ".png"
     };
@@ -238,9 +239,10 @@ const buildEmbedFromDeck = function(code) {
         "text": (decoded.format === 1 ? "Wild" : "Standard") + " - " + dust.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " dust"
     };
     embed.description = description;
-    embed.author = {
-        "name": hero.cardClass.toUpperCase()
-    };
+    //embed.author = {
+    //    "name": hero.cardClass.toUpperCase()
+    //};
+    embed.title = hero.cardClass.toUpperCase()
 
     return embed;
 
