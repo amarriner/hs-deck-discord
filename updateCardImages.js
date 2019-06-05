@@ -17,28 +17,19 @@ for (var i = 0; i < hearthstoneCards.length; i++) {
 
     if (!fs.existsSync(options.dest)) {
 
-        console.log(card.dbfId + " " + card.name);
+        console.log(card.dbfId + " " + card.id + " " + card.name);
+       
+        options.url = "https://art.hearthstonejson.com/v1/render/latest/enUS/512x/" + card.id + ".png";
 
-        unirest.get("https://omgvamp-hearthstone-v1.p.rapidapi.com/cards/" + card.id)
-            .header("X-RapidAPI-Host", "omgvamp-hearthstone-v1.p.rapidapi.com")
-            .header("X-RapidAPI-Key", config.mashapeKey)
-            .end(function (result) {
-
-                console.log(result.body[0]);
-                
-                options.url = result.body[0].img;
-
-                imageDownloader.image(options)
-                    .then(( {filename, image } ) => {
-                        console.log ("File saved to ", filename);
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    });
-
+        imageDownloader.image(options)
+            .then(( {filename, image } ) => {
+                console.log ("File saved to ", filename);
+            })
+            .catch((error) => {
+                console.log(error);
             });
-
-        return;
+        
+        // return;
 
     }
 

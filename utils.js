@@ -134,11 +134,11 @@ const buildEmbedFromCard = function(card) {
     var embed = new discord.RichEmbed();
     embed.title = card.name.toUpperCase();
     // embed.description = parseCardText(card.text);
-    embed.url = config.aws.baseUrl + card.dbfId + ".png";
+    embed.url = config.aws.baseUrl + card.id + ".png";
     embed.color = 30750;
     //embed.timestamp = new Date();
     embed.thumbnail = {
-        "url": config.aws.baseUrl + card.dbfId + ".png"
+        "url": config.aws.baseUrl + card.id + ".png"
     };
     //embed.footer = {
     //    "icon_url": "https://cdn.discordapp.com/app-icons/347801865431416833/d38ce6960e1d11f89e229b5e32bdbf34.png",
@@ -146,7 +146,7 @@ const buildEmbedFromCard = function(card) {
     //};
     //embed.author = {
     //    "name": card.name,
-    //    "url": config.aws.baseUrl + card.dbfId + ".png", 
+    //    "url": config.aws.baseUrl + card.id + ".png", 
     //    "icon_url": "https://cdn.discordapp.com/app-icons/347801865431416833/d38ce6960e1d11f89e229b5e32bdbf34.png"
     //};
     embed.fields = [
@@ -222,7 +222,7 @@ const buildEmbedFromDeck = function(code) {
 
     var description = "";
     for (var j = 0; j < cards.length; j++) {
-        description += "[" + cards[j].card.cost + "] [" + cards[j].card.name + "](" + config.aws.baseUrl + cards[j].card.dbfId + ".png" + ") "+ (cards[j].amount > 1 ? "x2" : "") + "\n";
+        description += "[" + cards[j].card.cost + "] [" + cards[j].card.name + "](" + config.aws.baseUrl + cards[j].card.id + ".png" + ") "+ (cards[j].amount > 1 ? "x2" : "") + "\n";
     }
 
     if (description.length >= 2048) {
@@ -233,7 +233,7 @@ const buildEmbedFromDeck = function(code) {
     embed.color = 30750;
     embed.url = "https://hs.protolambda.com/" + code;
     embed.thumbnail = {
-        "url": config.aws.baseUrl + hero.dbfId + ".png"
+        "url": config.aws.baseUrl + hero.id + ".png"
     };
     embed.footer = {
         "text": (decoded.format === 1 ? "Wild" : "Standard") + " - " + dust.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " dust"
