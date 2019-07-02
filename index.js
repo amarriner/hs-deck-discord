@@ -84,7 +84,7 @@ discord.client.on("message", message => {
                     message.channel.send("Found " + cards.length + " cards (" + cards.map(function (c) { return c.obj.name; }).join(", ") + "), displaying the best match");
                 }
 
-                message.channel.send(config.aws.baseUrl + cards[0].obj.dbfId + ".png", utils.buildEmbedFromCard(cards[0].obj));
+                message.channel.send(config.aws.baseUrl + cards[0].obj.id + ".png", utils.buildEmbedFromCard(cards[0].obj));
 
                 return;
             }
