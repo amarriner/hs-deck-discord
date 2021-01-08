@@ -7,6 +7,7 @@ const fuzzysort = require("fuzzysort");
 const hearthstoneCards = require("./json/cards.json");
 const netrunnerCards = require("./json/netrunner-cards.json");
 const arkhamCards = require("./json/arkham-cards.json");
+const lorCards = require("./json/lor-cards.json");
 
 const dustCost = {
     "COMMON": 40,
@@ -320,6 +321,34 @@ const findArkhamCardsByName = function(name) {
 
 }
 
+const findLorCardById = function(id) {
+
+    for (i in lorCards.cards) {
+        console.log(id + " :: " + lorCards.cards[i].name + " :: " + lorCards.cards[i].cardCode);
+        if (lorCards.cards[i].cardCode === id) {
+            console.log(lorCards.cards[i]);
+            return lorCards.cards[i];
+        }
+
+    }
+
+}
+
+const findLorCardsByName = function(name) {
+
+    var cards = [];
+    for (i in lorCards.cards) {
+
+        if (lorCards.cards[i].name.toLowerCase().indexOf(name.toLowerCase()) >= 0) {
+            cards.push(lorCards.cards[i]);
+        }
+
+    }
+
+    return cards;
+
+}
+
 const findNetrunnerCardById = function(id) {
 
     for (i in netrunnerCards.data) {
@@ -428,6 +457,8 @@ module.exports = {
     findArkhamCardsByName: findArkhamCardsByName,
     findHearthstoneCardById: findHearthstoneCardById,
     findHearthstoneCardsByName: findHearthstoneCardsByName,
+    findLorCardById: findLorCardById,
+    findLorCardsByName: findLorCardsByName,
     findNetrunnerCardById: findNetrunnerCardById,
     findNetrunnerCardsByName: findNetrunnerCardsByName,
     printDeck: printDeck

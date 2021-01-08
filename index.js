@@ -6,6 +6,7 @@ const re = /^!deck (.*)$/;
 const hsdeck = /^!hsdeck (.*)$/;
 const nr = /^!nr (.*)$/;
 const ah = /^!ah (.*)$/;
+const lor = /^!lor (.*)$/;
 //const hs = /^!hs ([^-].*)$/;
 const hs = /^!hs (.*)$/;
 const collectible = /(--collectible=)(true|false|both)/;
@@ -120,6 +121,35 @@ discord.client.on("message", message => {
             }
 
             message.channel.send("Couldn't find matching Arkham Horror card!")
+        }
+    }
+
+    //
+    // Get Legends of Runeterra card
+    //
+    if (message.content.startsWith("!lor")) {
+
+        var match = lor.exec(message.content);
+        if (match && match.length > 0) {
+
+            var card = utils.findLorCardById(match[1]);
+
+            if (card) {
+                message.channel.send("https://lor-images.amarriner.com/" + card.cardCode + ".png");
+                return;
+            }
+
+            var cards = utils.findLorCardsByName(match[1]);
+
+            if (cards.length) {
+                if (cards.length > 1) {
+                    message.channel.send("Found " + cards.length + " cards (" + cards.map(function (c) { return c.name + "(" + c.cardCode + ")"; }).join(", ") + "), displaying the first one");
+                }
+                message.channel.send("https://lor-images.amarriner.com/" + cards[0].cardCode + ".png");
+                return;
+            }
+
+            message.channel.send("Couldn't find matching Legends of Runeterra card!")
         }
     }
 
