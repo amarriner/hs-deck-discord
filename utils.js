@@ -324,7 +324,6 @@ const findArkhamCardsByName = function(name) {
 const findLorCardById = function(id) {
 
     for (i in lorCards.cards) {
-        console.log(id + " :: " + lorCards.cards[i].name + " :: " + lorCards.cards[i].cardCode);
         if (lorCards.cards[i].cardCode === id) {
             console.log(lorCards.cards[i]);
             return lorCards.cards[i];
@@ -334,18 +333,19 @@ const findLorCardById = function(id) {
 
 }
 
-const findLorCardsByName = function(name) {
+const findLorCardsByName = function(name, collectibleFlag) {
 
-    var cards = [];
-    for (i in lorCards.cards) {
-
-        if (lorCards.cards[i].name.toLowerCase().indexOf(name.toLowerCase()) >= 0) {
-            cards.push(lorCards.cards[i]);
-        }
-
-    }
-
-    return cards;
+    return fuzzysort.go(name,
+        lorCards.cards.filter(c =>
+            (
+                (collectibleFlag === "true" && c.collectible === true) ||
+                (collectibleFlag === "false" && !c.collectible) ||
+                (collectibleFlag === "both")
+            )), {
+                key:"name",
+                threshold: -10000
+            }
+        );
 
 }
 

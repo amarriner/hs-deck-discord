@@ -129,23 +129,32 @@ discord.client.on("message", message => {
     //
     if (message.content.startsWith("!lor")) {
 
-        var match = lor.exec(message.content);
+        var collectibleFlag = "true";
+        var collectibleMatch = collectible.exec(message.content);
+        if (collectibleMatch && collectibleMatch.length > 0) {
+
+            message.content = message.content.replace(collectible, "").replace("  ", " ");
+            collectibleFlag = collectibleMatch[collectibleMatch.length - 1].toLowerCase();
+
+        }
+
+        var match = lor.exec(message.content.trim());
         if (match && match.length > 0) {
 
             var card = utils.findLorCardById(match[1]);
 
             if (card) {
-                message.channel.send("https://lor-images.amarriner.com/" + card.cardCode + ".png");
+                message.channel.send(config.aws.lorBaseUrl + "/" + card.cardCode + ".png");
                 return;
             }
 
-            var cards = utils.findLorCardsByName(match[1]);
+            var cards = utils.findLorCardsByName(match[1], collectibleFlag);
 
             if (cards.length) {
                 if (cards.length > 1) {
-                    message.channel.send("Found " + cards.length + " cards (" + cards.map(function (c) { return c.name + "(" + c.cardCode + ")"; }).join(", ") + "), displaying the first one");
+                    message.channel.send("Found " + cards.length + " cards (" + cards.map(function (c) { return c.obj.name + "(" + c.obj.cardCode + ")"; }).join(",  ") + "), displaying the first one");
                 }
-                message.channel.send("https://lor-images.amarriner.com/" + cards[0].cardCode + ".png");
+                message.channel.send(config.aws.lorBaseUrl + "/" + cards[0].obj.cardCode + ".png");
                 return;
             }
 

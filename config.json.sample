@@ -7,6 +7,7 @@
         "secretAccessKey": "AMAZON_SECRET_KEY_HERE",
         "region": "AMAZON_REGION_HERE",
         "baseUrl": "AMAZON_BUCKET_URL_HERE",
-        "bucketName": "AMAZON_BUCKET_NAME_HERE"
+        "bucketName": "AMAZON_BUCKET_NAME_HERE",
+        "lorBaseUrl": "LEGENDS_OF_RUNETERRA_URL_HERE"
     }
 }
